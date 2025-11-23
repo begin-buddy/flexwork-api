@@ -1,195 +1,195 @@
 # NestJS Template - Enterprise Grade
 
-[English](./README.en.md) | 한국어
+English | [한국어](./README.ko.md)
 
-프로덕션 수준의 NestJS 프로젝트 템플릿입니다. 보안, 국제화, 테스트, CI/CD가 모두 설정되어 있습니다.
+A production-ready NestJS project template with security, internationalization, testing, and CI/CD all configured.
 
 [![CI](https://github.com/your-org/template-typescript-nestjs/workflows/CI/badge.svg)](https://github.com/your-org/template-typescript-nestjs/actions)
 [![codecov](https://codecov.io/gh/your-org/template-typescript-nestjs/branch/main/graph/badge.svg)](https://codecov.io/gh/your-org/template-typescript-nestjs)
 [![Docker](https://github.com/your-org/template-typescript-nestjs/workflows/Docker%20Build%20%26%20Push/badge.svg)](https://github.com/your-org/template-typescript-nestjs/actions)
 
-## ✨ 주요 기능
+## ✨ Key Features
 
-### 🏗️ 아키텍처
-- **Layered Architecture** - Controller, Service, Repository 계층 분리
-- **Domain-Driven Design** - 도메인 중심 설계
-- **Dependency Injection** - NestJS DI 컨테이너 활용
-- **모듈화 구조** - 기능별 모듈 분리
+### 🏗️ Architecture
+- **Layered Architecture** - Separation of Controller, Service, and Repository layers
+- **Domain-Driven Design** - Domain-centric design
+- **Dependency Injection** - Utilizing NestJS DI container
+- **Modular Structure** - Feature-based module separation
 
-### 🔒 보안
-- **Helmet** - HTTP 헤더 보안 강화
-- **Rate Limiting** - 요청 속도 제한 (Throttler)
-- **CORS** - Cross-Origin Resource Sharing 설정
-- **Input Validation** - class-validator를 통한 입력 검증
-- **환경 변수 관리** - .env 파일 및 ConfigModule
+### 🔒 Security
+- **Helmet** - Enhanced HTTP header security
+- **Rate Limiting** - Request rate limiting (Throttler)
+- **CORS** - Cross-Origin Resource Sharing configuration
+- **Input Validation** - Input validation via class-validator
+- **Environment Variable Management** - .env files and ConfigModule
 
-### 🌍 국제화 (i18n)
-- **다국어 지원** - nestjs-i18n 라이브러리
-- **언어별 메시지** - 한국어, 영어 등 지원
-- **유효성 검증 메시지** - 다국어 에러 메시지
-- **Accept-Language 헤더** - 자동 언어 감지
+### 🌍 Internationalization (i18n)
+- **Multi-language Support** - nestjs-i18n library
+- **Language-specific Messages** - Support for Korean, English, etc.
+- **Validation Messages** - Multi-language error messages
+- **Accept-Language Header** - Automatic language detection
 
-### 📊 데이터베이스
-- **TypeORM** - 강력한 ORM 지원
-- **MySQL** - 프로덕션 레벨 RDBMS
-- **Migration** - 데이터베이스 스키마 버전 관리
-- **Repository Pattern** - 데이터 접근 계층 추상화
+### 📊 Database
+- **TypeORM** - Powerful ORM support
+- **MySQL** - Production-level RDBMS
+- **Migration** - Database schema version management
+- **Repository Pattern** - Data access layer abstraction
 
-### 📝 로깅
-- **Winston** - 구조화된 로그 관리
-- **로그 레벨** - error, warn, info, debug
-- **파일 로깅** - 로그 파일 자동 로테이션
-- **컨텍스트 로그** - 요청별 추적 가능
+### 📝 Logging
+- **Winston** - Structured log management
+- **Log Levels** - error, warn, info, debug
+- **File Logging** - Automatic log file rotation
+- **Context Logging** - Request-level traceability
 
-### 🧪 테스트
-- **Jest** - 단위 테스트 및 통합 테스트
-- **E2E 테스트** - 엔드투엔드 테스트
-- **Faker & Fishery** - 테스트 데이터 생성
-- **코드 커버리지** - 테스트 커버리지 측정
+### 🧪 Testing
+- **Jest** - Unit and integration testing
+- **E2E Testing** - End-to-end testing
+- **Faker & Fishery** - Test data generation
+- **Code Coverage** - Test coverage measurement
 
-### 📚 API 문서
-- **Swagger/OpenAPI** - 자동 API 문서화
-- **DTO 스키마** - 자동 스키마 생성
-- **API 테스트** - Swagger UI에서 직접 테스트
+### 📚 API Documentation
+- **Swagger/OpenAPI** - Automatic API documentation
+- **DTO Schema** - Automatic schema generation
+- **API Testing** - Direct testing in Swagger UI
 
 ### 🚀 DevOps
-- **Docker** - 멀티 스테이지 빌드
-- **Docker Compose** - 개발 및 프로덕션 환경
-- **GitHub Actions** - CI/CD 파이프라인
-- **헬스체크** - 애플리케이션 상태 모니터링
+- **Docker** - Multi-stage builds
+- **Docker Compose** - Development and production environments
+- **GitHub Actions** - CI/CD pipeline
+- **Health Checks** - Application status monitoring
 
-### 📋 코드 품질
-- **ESLint** - TypeScript 린팅
-- **Prettier** - 코드 포맷팅
+### 📋 Code Quality
+- **ESLint** - TypeScript linting
+- **Prettier** - Code formatting
 - **Husky** - Git hooks
-- **Lint-staged** - 커밋 전 자동 검사
-- **Commitlint** - 커밋 메시지 규칙
+- **Lint-staged** - Automatic pre-commit checks
+- **Commitlint** - Commit message rules
 
-## 🚀 빠른 시작
+## 🚀 Quick Start
 
-### 필수 요구사항
+### Prerequisites
 - Node.js 20.x
 - pnpm 8.x
-- Docker & Docker Compose (선택사항)
+- Docker & Docker Compose (optional)
 
-### 설치
+### Installation
 
 ```bash
-# 저장소 클론
+# Clone repository
 git clone https://github.com/your-org/template-typescript-nestjs.git
 cd template-typescript-nestjs
 
-# 의존성 설치
+# Install dependencies
 pnpm install
 
-# 환경 변수 설정
+# Set up environment variables
 cp .env.example .env
-# .env 파일을 수정하여 환경 변수 설정
+# Edit .env file to configure environment variables
 ```
 
-### 개발 서버 실행
+### Running Development Server
 
 ```bash
-# 개발 모드
+# Development mode
 pnpm run start:dev
 
-# 디버그 모드
+# Debug mode
 pnpm run start:debug
 ```
 
-애플리케이션이 http://localhost:3000 에서 실행됩니다.
+The application will run at http://localhost:3000
 
-- **API 문서**: http://localhost:3000/api-docs
-- **헬스체크**: http://localhost:3000/health
+- **API Documentation**: http://localhost:3000/api-docs
+- **Health Check**: http://localhost:3000/health
 
-### Docker로 실행
+### Running with Docker
 
 ```bash
-# 개발 환경
+# Development environment
 pnpm run docker:dev
 
-# 프로덕션 환경
+# Production environment
 pnpm run docker:up
 ```
 
-## 📖 문서
+## 📖 Documentation
 
-자세한 문서는 [docs](./docs) 디렉토리를 참고하세요:
+For detailed documentation, see the [docs](./docs) directory:
 
-- [아키텍처 설명](./docs/ARCHITECTURE.md)
-- [API 문서](./docs/API.md)
-- [개발 가이드](./docs/DEVELOPMENT.md)
-- [배포 가이드](./docs/DEPLOYMENT.md)
+- [Architecture](./docs/ARCHITECTURE.md)
+- [API Documentation](./docs/API.md)
+- [Development Guide](./docs/DEVELOPMENT.md)
+- [Deployment Guide](./docs/DEPLOYMENT.md)
 
-## 🧪 테스트
+## 🧪 Testing
 
 ```bash
-# 단위 테스트
+# Unit tests
 pnpm run test
 
-# E2E 테스트
+# E2E tests
 pnpm run test:e2e
 
-# 테스트 커버리지
+# Test coverage
 pnpm run test:cov
 
-# 테스트 watch 모드
+# Test watch mode
 pnpm run test:watch
 ```
 
-## 🏗️ 빌드
+## 🏗️ Build
 
 ```bash
-# 프로덕션 빌드
+# Production build
 pnpm run build
 
-# 프로덕션 실행
+# Run production
 pnpm run start:prod
 ```
 
-## 📁 프로젝트 구조
+## 📁 Project Structure
 
 ```
 template-typescript-nestjs/
 ├── src/
-│   ├── common/           # 공통 모듈
-│   │   ├── config/       # 설정 (database, app)
-│   │   ├── decorators/   # 커스텀 데코레이터
-│   │   ├── filters/      # 예외 필터
-│   │   ├── guards/       # 가드
-│   │   ├── interceptors/ # 인터셉터
-│   │   └── pipes/        # 파이프
-│   ├── modules/          # 기능 모듈
-│   │   ├── auth/         # 인증 모듈
-│   │   └── users/        # 사용자 모듈
-│   ├── app.module.ts     # 루트 모듈
-│   └── main.ts           # 진입점
-├── test/                 # E2E 테스트
-├── docker/               # Docker 설정
-├── i18n/                 # 국제화 파일
-├── docs/                 # 문서
+│   ├── common/           # Common modules
+│   │   ├── config/       # Configuration (database, app)
+│   │   ├── decorators/   # Custom decorators
+│   │   ├── filters/      # Exception filters
+│   │   ├── guards/       # Guards
+│   │   ├── interceptors/ # Interceptors
+│   │   └── pipes/        # Pipes
+│   ├── modules/          # Feature modules
+│   │   ├── auth/         # Authentication module
+│   │   └── users/        # User module
+│   ├── app.module.ts     # Root module
+│   └── main.ts           # Entry point
+├── test/                 # E2E tests
+├── docker/               # Docker configuration
+├── i18n/                 # Internationalization files
+├── docs/                 # Documentation
 └── .github/              # GitHub Actions
 ```
 
-## 🤝 기여하기
+## 🤝 Contributing
 
-기여는 언제나 환영합니다! [CONTRIBUTING.md](./CONTRIBUTING.md)를 참고해주세요.
+Contributions are always welcome! Please refer to [CONTRIBUTING.md](./CONTRIBUTING.md).
 
-### 개발 워크플로우
+### Development Workflow
 
-1. 이슈 확인 또는 생성
-2. Feature 브랜치 생성 (`git checkout -b feature/amazing-feature`)
-3. 변경사항 커밋 (`git commit -m 'feat: add amazing feature'`)
-4. 브랜치에 푸시 (`git push origin feature/amazing-feature`)
-5. Pull Request 생성
+1. Check or create an issue
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'feat: add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Create a Pull Request
 
-## 📝 라이선스
+## 📝 License
 
-이 프로젝트는 UNLICENSED 라이선스입니다.
+This project is UNLICENSED.
 
-## 📧 문의
+## 📧 Contact
 
-프로젝트 관련 문의사항은 이슈를 생성해주세요.
+For project inquiries, please create an issue.
 
 ---
 

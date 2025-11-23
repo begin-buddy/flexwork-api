@@ -1,18 +1,18 @@
-# 아키텍처 설명
+# Architecture Documentation
 
-[English](./ARCHITECTURE.en.md) | [한국어](./ARCHITECTURE.md)
+English | [한국어](./ARCHITECTURE.ko.md)
 
-NestJS Template 프로젝트의 아키텍처를 설명합니다.
+This document describes the architecture of the NestJS Template project.
 
-## 목차
+## Table of Contents
 
-- [전체 구조](#전체-구조)
-- [계층 아키텍처](#계층-아키텍처)
-- [모듈 구조](#모듈-구조)
-- [디자인 패턴](#디자인-패턴)
-- [보안 아키텍처](#보안-아키텍처)
+- [Overall Structure](#overall-structure)
+- [Layered Architecture](#layered-architecture)
+- [Module Structure](#module-structure)
+- [Design Patterns](#design-patterns)
+- [Security Architecture](#security-architecture)
 
-## 전체 구조
+## Overall Structure
 
 ```
 ┌─────────────────────────────────────────┐
@@ -36,18 +36,18 @@ NestJS Template 프로젝트의 아키텍처를 설명합니다.
 └─────────────────────────────────────────┘
 ```
 
-## 계층 아키텍처
+## Layered Architecture
 
-### 1. Presentation Layer (표현 계층)
+### 1. Presentation Layer
 
-**역할**: HTTP 요청/응답 처리, 입력 검증
+**Role**: HTTP request/response handling, input validation
 
-**구성요소**:
-- **Controllers**: HTTP 엔드포인트 정의
-- **DTOs**: 데이터 전송 객체, 입력 검증
-- **Swagger**: API 문서화
+**Components**:
+- **Controllers**: HTTP endpoint definition
+- **DTOs**: Data Transfer Objects, input validation
+- **Swagger**: API documentation
 
-**예시**:
+**Example**:
 ```typescript
 @Controller('users')
 @ApiTags('users')
@@ -55,22 +55,22 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get(':id')
-  @ApiOperation({ summary: '사용자 조회' })
+  @ApiOperation({ summary: 'Get user' })
   async findOne(@Param('id') id: string) {
     return this.usersService.findOne(+id);
   }
 }
 ```
 
-### 2. Application Layer (응용 계층)
+### 2. Application Layer
 
-**역할**: 비즈니스 로직 구현, 트랜잭션 관리
+**Role**: Business logic implementation, transaction management
 
-**구성요소**:
-- **Services**: 비즈니스 로직
-- **Use Cases**: 애플리케이션 유즈케이스
+**Components**:
+- **Services**: Business logic
+- **Use Cases**: Application use cases
 
-**예시**:
+**Example**:
 ```typescript
 @Injectable()
 export class UsersService {
@@ -82,23 +82,23 @@ export class UsersService {
   async findOne(id: number): Promise<User> {
     const user = await this.usersRepository.findOne({ where: { id } });
     if (!user) {
-      throw new NotFoundException('사용자를 찾을 수 없습니다');
+      throw new NotFoundException('User not found');
     }
     return user;
   }
 }
 ```
 
-### 3. Domain Layer (도메인 계층)
+### 3. Domain Layer
 
-**역할**: 핵심 비즈니스 엔티티 및 규칙
+**Role**: Core business entities and rules
 
-**구성요소**:
-- **Entities**: 도메인 객체
-- **Value Objects**: 값 객체
-- **Domain Events**: 도메인 이벤트
+**Components**:
+- **Entities**: Domain objects
+- **Value Objects**: Value objects
+- **Domain Events**: Domain events
 
-**예시**:
+**Example**:
 ```typescript
 @Entity('users')
 export class User {
@@ -119,41 +119,41 @@ export class User {
 }
 ```
 
-### 4. Infrastructure Layer (인프라 계층)
+### 4. Infrastructure Layer
 
-**역할**: 외부 시스템과의 통신
+**Role**: Communication with external systems
 
-**구성요소**:
-- **Database**: TypeORM 연결
-- **External APIs**: 외부 API 클라이언트
-- **File Storage**: 파일 저장소
-- **Messaging**: 메시지 큐
+**Components**:
+- **Database**: TypeORM connection
+- **External APIs**: External API clients
+- **File Storage**: File storage
+- **Messaging**: Message queues
 
-## 모듈 구조
+## Module Structure
 
-### Core Modules (핵심 모듈)
+### Core Modules
 
 #### AppModule
-- **역할**: 루트 모듈, 전체 애플리케이션 설정
-- **의존성**: 모든 기능 모듈 임포트
+- **Role**: Root module, overall application configuration
+- **Dependencies**: Imports all feature modules
 
 #### ConfigModule
-- **역할**: 환경 변수 관리
-- **특징**:
-  - Joi를 통한 검증
-  - 타입 안전성
-  - 환경별 설정 분리
+- **Role**: Environment variable management
+- **Features**:
+  - Validation via Joi
+  - Type safety
+  - Environment-specific configuration separation
 
 #### DatabaseModule
-- **역할**: 데이터베이스 연결 설정
-- **특징**:
-  - TypeORM 설정
-  - Connection Pool 관리
-  - Migration 지원
+- **Role**: Database connection configuration
+- **Features**:
+  - TypeORM configuration
+  - Connection pool management
+  - Migration support
 
-### Feature Modules (기능 모듈)
+### Feature Modules
 
-각 기능 모듈은 다음 구조를 따릅니다:
+Each feature module follows this structure:
 
 ```
 users/
@@ -169,42 +169,42 @@ users/
 ```
 
 #### UsersModule
-- **역할**: 사용자 관리
-- **기능**:
-  - 사용자 CRUD
-  - 프로필 관리
-  - 권한 관리
+- **Role**: User management
+- **Features**:
+  - User CRUD
+  - Profile management
+  - Permission management
 
 #### AuthModule
-- **역할**: 인증/인가
-- **기능**:
-  - 로그인/로그아웃
-  - JWT 토큰 발급
-  - 비밀번호 관리
+- **Role**: Authentication/Authorization
+- **Features**:
+  - Login/Logout
+  - JWT token issuance
+  - Password management
 
-### Common Modules (공통 모듈)
+### Common Modules
 
 #### Filters
-- **AllExceptionsFilter**: 전역 예외 처리
-- **HttpExceptionFilter**: HTTP 예외 처리
+- **AllExceptionsFilter**: Global exception handling
+- **HttpExceptionFilter**: HTTP exception handling
 
 #### Guards
-- **JwtAuthGuard**: JWT 인증 가드
-- **RolesGuard**: 역할 기반 접근 제어
+- **JwtAuthGuard**: JWT authentication guard
+- **RolesGuard**: Role-based access control
 
 #### Interceptors
-- **LoggingInterceptor**: 요청/응답 로깅
-- **TransformInterceptor**: 응답 변환
+- **LoggingInterceptor**: Request/response logging
+- **TransformInterceptor**: Response transformation
 
 #### Pipes
-- **ValidationPipe**: 입력 검증
-- **ParseIntPipe**: 파라미터 변환
+- **ValidationPipe**: Input validation
+- **ParseIntPipe**: Parameter transformation
 
-## 디자인 패턴
+## Design Patterns
 
-### 1. Dependency Injection (의존성 주입)
+### 1. Dependency Injection
 
-NestJS의 DI 컨테이너를 활용하여 느슨한 결합 구현:
+Implementing loose coupling using NestJS DI container:
 
 ```typescript
 @Injectable()
@@ -217,9 +217,9 @@ export class UsersService {
 }
 ```
 
-### 2. Repository Pattern (리포지토리 패턴)
+### 2. Repository Pattern
 
-데이터 접근 로직 추상화:
+Abstracting data access logic:
 
 ```typescript
 export class UsersService {
@@ -234,9 +234,9 @@ export class UsersService {
 }
 ```
 
-### 3. Factory Pattern (팩토리 패턴)
+### 3. Factory Pattern
 
-테스트 데이터 생성:
+Test data generation:
 
 ```typescript
 export const userFactory = Factory.define<User>(({ sequence }) => ({
@@ -246,9 +246,9 @@ export const userFactory = Factory.define<User>(({ sequence }) => ({
 }));
 ```
 
-### 4. Decorator Pattern (데코레이터 패턴)
+### 4. Decorator Pattern
 
-횡단 관심사 처리:
+Handling cross-cutting concerns:
 
 ```typescript
 @UseGuards(JwtAuthGuard)
@@ -257,9 +257,9 @@ export const userFactory = Factory.define<User>(({ sequence }) => ({
 export class UsersController {}
 ```
 
-### 5. Strategy Pattern (전략 패턴)
+### 5. Strategy Pattern
 
-다양한 인증 전략:
+Various authentication strategies:
 
 ```typescript
 @Injectable()
@@ -273,9 +273,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 }
 ```
 
-## 보안 아키텍처
+## Security Architecture
 
-### 1. 인증 (Authentication)
+### 1. Authentication
 
 ```
 ┌─────────┐      ┌──────────┐      ┌─────────┐
@@ -286,7 +286,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
                  JWT Verify
 ```
 
-### 2. 인가 (Authorization)
+### 2. Authorization
 
 ```
 ┌─────────┐      ┌──────────┐      ┌─────────┐
@@ -295,7 +295,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
                  └──────────┘      └─────────┘
 ```
 
-### 3. 입력 검증
+### 3. Input Validation
 
 ```
 ┌─────────┐      ┌──────────┐      ┌─────────┐
@@ -306,9 +306,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
               Validation Rules
 ```
 
-## 데이터 흐름
+## Data Flow
 
-### 요청 처리 흐름
+### Request Processing Flow
 
 ```
 1. HTTP Request
@@ -336,23 +336,23 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 12. HTTP Response
 ```
 
-## 확장성 고려사항
+## Scalability Considerations
 
-### 1. 수평 확장 (Horizontal Scaling)
+### 1. Horizontal Scaling
 
-- Stateless 아키텍처
-- 세션 외부화 (Redis)
-- 로드 밸런서 지원
+- Stateless architecture
+- Session externalization (Redis)
+- Load balancer support
 
-### 2. 수직 확장 (Vertical Scaling)
+### 2. Vertical Scaling
 
-- Connection Pool 최적화
-- 캐싱 전략
-- 쿼리 최적화
+- Connection pool optimization
+- Caching strategy
+- Query optimization
 
-### 3. 마이크로서비스 전환
+### 3. Microservices Transition
 
-현재 모놀리식 구조에서 마이크로서비스로 전환 시:
+Transitioning from current monolithic structure to microservices:
 
 ```
 ┌──────────────────────────────────┐
@@ -367,31 +367,31 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 └───────┘ └─────┘ └─────┘ └───────┘
 ```
 
-## 성능 최적화
+## Performance Optimization
 
-### 1. 데이터베이스
+### 1. Database
 
-- 인덱스 최적화
-- Connection Pool 설정
-- Query 최적화
+- Index optimization
+- Connection pool configuration
+- Query optimization
 
-### 2. 캐싱
+### 2. Caching
 
-- Redis 캐시 레이어
-- HTTP 캐시 헤더
-- 결과 캐싱
+- Redis cache layer
+- HTTP cache headers
+- Result caching
 
-### 3. 비동기 처리
+### 3. Asynchronous Processing
 
-- 메시지 큐 (Bull, RabbitMQ)
-- 이벤트 드리븐 아키텍처
+- Message queues (Bull, RabbitMQ)
+- Event-driven architecture
 
-## 모니터링 및 로깅
+## Monitoring and Logging
 
-### 로깅 전략
+### Logging Strategy
 
 ```typescript
-// 구조화된 로깅
+// Structured logging
 logger.log({
   context: 'UsersService',
   method: 'findOne',
@@ -400,15 +400,15 @@ logger.log({
 });
 ```
 
-### 메트릭 수집
+### Metrics Collection
 
-- 응답 시간
-- 에러율
-- 활성 연결 수
-- 처리량 (Throughput)
+- Response time
+- Error rate
+- Active connections
+- Throughput
 
-## 참고 자료
+## References
 
-- [NestJS 공식 문서](https://docs.nestjs.com/)
+- [NestJS Official Documentation](https://docs.nestjs.com/)
 - [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
 - [Domain-Driven Design](https://martinfowler.com/bliki/DomainDrivenDesign.html)
