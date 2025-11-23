@@ -1,75 +1,79 @@
-# 배포 가이드
+# Deployment Guide
 
 [English](./DEPLOYMENT.en.md) | [한국어](./DEPLOYMENT.md)
 
-NestJS Template 프로젝트의 배포 가이드입니다.
+Deployment guide for the NestJS Template project.
 
-## 목차
+## Table of Contents
 
-- [배포 준비](#배포-준비)
-- [환경 설정](#환경-설정)
-- [Docker 배포](#docker-배포)
-- [클라우드 배포](#클라우드-배포)
+- [Deployment Preparation](#deployment-preparation)
+- [Environment Configuration](#environment-configuration)
+- [Docker Deployment](#docker-deployment)
+- [Cloud Deployment](#cloud-deployment)
 - [CI/CD](#cicd)
-- [모니터링](#모니터링)
-- [보안 체크리스트](#보안-체크리스트)
+- [Monitoring](#monitoring)
+- [Security Checklist](#security-checklist)
 
-## 배포 준비
+## Deployment Preparation
 
-### 1. 환경 변수 설정
+### 1. Environment Variable Configuration
 
-프로덕션 환경 변수 준비:
+Prepare production environment variables:
 
 ```env
 # .env.production
 NODE_ENV=production
 PORT=3000
 
-# 데이터베이스
+# Database
 DB_HOST=production-db-host
 DB_PORT=3306
 DB_USERNAME=prod_user
 DB_PASSWORD=secure_password_here
 DB_DATABASE=nestjs_prod
 
-# JWT (강력한 시크릿 키 사용)
+# JWT (use strong secret key)
 JWT_SECRET=very-secure-random-secret-key-change-this
 JWT_EXPIRES_IN=1d
 
-# 로깅
+# Logging
 LOG_LEVEL=error
 
 # CORS
 CORS_ORIGIN=https://yourdomain.com
 ```
 
-### 2. 빌드 테스트
+### 2. Build Testing
 
 ```bash
-# 프로덕션 빌드
+# Production build
 pnpm run build
 
-# 빌드 결과 확인
+# Check build results
 ls -la dist/
 
-# 프로덕션 모드 로컬 테스트
+# Test in production mode locally
 NODE_ENV=production node dist/main.js
 ```
 
-### 3. 보안 검토
+### 3. Security Review
 
-- [ ] 환경 변수에 민감한 정보가 하드코딩되지 않았는지 확인
-- [ ] 강력한 JWT 시크릿 키 설정
-- [ ] 데이터베이스 비밀번호 강도 확인
-- [ ] CORS 설정 확인
-- [ ] Rate Limiting 설정 확인
-- [ ] Helmet 보안 헤더 활성화 확인
+- [ ] Verify no sensitive information is hardcoded in environment variables
+- [ ] Set strong JWT secret key
+- [ ] Check database password strength
+- [ ] Verify CORS configuration
+- [ ] Check Rate Limiting configuration
+- [ ] Verify Helmet security headers are enabled
+- [ ] Ensure all input validation is working properly
+- [ ] Verify SSL/TLS certificate is installed
+- [ ] Check logs don't contain sensitive information
+- [ ] Verify database backup is configured
 
-## 환경 설정
+## Environment Configuration
 
-### 프로덕션 최적화
+### Production Optimization
 
-#### package.json 스크립트
+#### package.json Scripts
 
 ```json
 {
@@ -79,40 +83,40 @@ NODE_ENV=production node dist/main.js
 }
 ```
 
-#### 프로덕션 의존성만 설치
+#### Install Production Dependencies Only
 
 ```bash
 pnpm install --prod --frozen-lockfile
 ```
 
-### Node.js 프로세스 관리
+### Node.js Process Management
 
-#### PM2 사용
+#### Using PM2
 
 ```bash
-# PM2 설치
+# Install PM2
 npm install -g pm2
 
-# 애플리케이션 시작
+# Start application
 pm2 start dist/main.js --name nestjs-app
 
-# 클러스터 모드 (멀티코어 활용)
+# Cluster mode (utilize multiple cores)
 pm2 start dist/main.js -i max --name nestjs-app
 
-# 상태 확인
+# Check status
 pm2 status
 
-# 로그 확인
+# View logs
 pm2 logs nestjs-app
 
-# 재시작
+# Restart
 pm2 restart nestjs-app
 
-# 중지
+# Stop
 pm2 stop nestjs-app
 ```
 
-#### PM2 Ecosystem 파일
+#### PM2 Ecosystem File
 
 `ecosystem.config.js`:
 ```javascript
@@ -136,55 +140,55 @@ module.exports = {
 };
 ```
 
-실행:
+Run:
 ```bash
 pm2 start ecosystem.config.js
 ```
 
-## Docker 배포
+## Docker Deployment
 
-### 1. Docker 이미지 빌드
+### 1. Build Docker Image
 
 ```bash
-# 프로덕션 이미지 빌드
+# Build production image
 docker build -f docker/Dockerfile -t nestjs-app:latest .
 
-# 이미지 확인
+# Check image
 docker images | grep nestjs-app
 
-# 이미지 크기 확인
+# Check image size
 docker image inspect nestjs-app:latest --format='{{.Size}}' | numfmt --to=iec
 ```
 
-### 2. Docker Compose 배포
+### 2. Deploy with Docker Compose
 
 ```bash
-# 프로덕션 환경 실행
+# Run production environment
 docker-compose -f docker/docker-compose.yml up -d
 
-# 로그 확인
+# View logs
 docker-compose -f docker/docker-compose.yml logs -f app
 
-# 상태 확인
+# Check status
 docker-compose -f docker/docker-compose.yml ps
 
-# 중지
+# Stop
 docker-compose -f docker/docker-compose.yml down
 ```
 
-### 3. Docker 레지스트리에 푸시
+### 3. Push to Docker Registry
 
 #### Docker Hub
 
 ```bash
-# 로그인
+# Login
 docker login
 
-# 태그
+# Tag
 docker tag nestjs-app:latest username/nestjs-app:latest
 docker tag nestjs-app:latest username/nestjs-app:1.0.0
 
-# 푸시
+# Push
 docker push username/nestjs-app:latest
 docker push username/nestjs-app:1.0.0
 ```
@@ -192,59 +196,59 @@ docker push username/nestjs-app:1.0.0
 #### GitHub Container Registry
 
 ```bash
-# 로그인
+# Login
 echo $GITHUB_TOKEN | docker login ghcr.io -u USERNAME --password-stdin
 
-# 태그
+# Tag
 docker tag nestjs-app:latest ghcr.io/username/nestjs-app:latest
 
-# 푸시
+# Push
 docker push ghcr.io/username/nestjs-app:latest
 ```
 
-## 클라우드 배포
+## Cloud Deployment
 
 ### AWS EC2
 
-#### 1. EC2 인스턴스 설정
+#### 1. EC2 Instance Setup
 
 ```bash
-# EC2 인스턴스에 SSH 접속
+# SSH to EC2 instance
 ssh -i key.pem ec2-user@ec2-xx-xx-xx-xx.compute.amazonaws.com
 
-# Docker 설치
+# Install Docker
 sudo yum update -y
 sudo yum install docker -y
 sudo service docker start
 sudo usermod -a -G docker ec2-user
 
-# Docker Compose 설치
+# Install Docker Compose
 sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
 ```
 
-#### 2. 애플리케이션 배포
+#### 2. Deploy Application
 
 ```bash
-# 저장소 클론
+# Clone repository
 git clone https://github.com/your-org/template-typescript-nestjs.git
 cd template-typescript-nestjs
 
-# 환경 변수 설정
+# Configure environment variables
 cp .env.example .env
-vim .env  # 프로덕션 값으로 수정
+vim .env  # Edit with production values
 
-# Docker Compose로 실행
+# Run with Docker Compose
 docker-compose -f docker/docker-compose.yml up -d
 ```
 
-#### 3. Nginx 리버스 프록시 설정
+#### 3. Nginx Reverse Proxy Setup
 
 ```bash
-# Nginx 설치
+# Install Nginx
 sudo yum install nginx -y
 
-# 설정 파일 작성
+# Create configuration file
 sudo vim /etc/nginx/conf.d/nestjs.conf
 ```
 
@@ -269,40 +273,40 @@ server {
 ```
 
 ```bash
-# Nginx 시작
+# Start Nginx
 sudo service nginx start
 sudo systemctl enable nginx
 ```
 
-#### 4. SSL 인증서 설정 (Let's Encrypt)
+#### 4. SSL Certificate Setup (Let's Encrypt)
 
 ```bash
-# Certbot 설치
+# Install Certbot
 sudo yum install certbot python3-certbot-nginx -y
 
-# SSL 인증서 발급
+# Issue SSL certificate
 sudo certbot --nginx -d yourdomain.com
 
-# 자동 갱신 설정
+# Set up automatic renewal
 sudo certbot renew --dry-run
 ```
 
 ### AWS ECS (Fargate)
 
-#### 1. ECR에 이미지 푸시
+#### 1. Push Image to ECR
 
 ```bash
-# ECR 로그인
+# ECR login
 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com
 
-# 이미지 태그
+# Tag image
 docker tag nestjs-app:latest ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/nestjs-app:latest
 
-# 푸시
+# Push
 docker push ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/nestjs-app:latest
 ```
 
-#### 2. ECS 태스크 정의
+#### 2. ECS Task Definition
 
 `task-definition.json`:
 ```json
@@ -350,16 +354,16 @@ docker push ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/nestjs-app:latest
 ### Google Cloud Run
 
 ```bash
-# gcloud CLI 인증
+# Authenticate gcloud CLI
 gcloud auth login
 
-# 프로젝트 설정
+# Set project
 gcloud config set project PROJECT_ID
 
-# 이미지 빌드 및 푸시
+# Build and push image
 gcloud builds submit --tag gcr.io/PROJECT_ID/nestjs-app
 
-# Cloud Run에 배포
+# Deploy to Cloud Run
 gcloud run deploy nestjs-app \
   --image gcr.io/PROJECT_ID/nestjs-app \
   --platform managed \
@@ -371,21 +375,21 @@ gcloud run deploy nestjs-app \
 ### Heroku
 
 ```bash
-# Heroku CLI 로그인
+# Login to Heroku CLI
 heroku login
 
-# 앱 생성
+# Create app
 heroku create your-app-name
 
-# 환경 변수 설정
+# Set environment variables
 heroku config:set NODE_ENV=production
 heroku config:set DB_HOST=your-db-host
 heroku config:set JWT_SECRET=your-secret
 
-# 배포
+# Deploy
 git push heroku main
 
-# 로그 확인
+# View logs
 heroku logs --tail
 ```
 
@@ -393,9 +397,9 @@ heroku logs --tail
 
 ### GitHub Actions
 
-이미 설정된 `.github/workflows/ci.yml`과 `.github/workflows/docker.yml`을 사용합니다.
+Use the already configured `.github/workflows/ci.yml` and `.github/workflows/docker.yml`.
 
-#### 배포 워크플로우 추가
+#### Add Deployment Workflow
 
 `.github/workflows/deploy.yml`:
 ```yaml
@@ -439,17 +443,17 @@ jobs:
             --force-new-deployment
 ```
 
-## 모니터링
+## Monitoring
 
-### 헬스체크
+### Health Checks
 
-애플리케이션에 이미 구현된 헬스체크 엔드포인트 활용:
+Use the already implemented health check endpoint in the application:
 
 ```bash
-# 헬스체크
+# Health check
 curl http://your-domain.com/health
 
-# 응답
+# Response
 {
   "status": "ok",
   "info": {
@@ -460,39 +464,39 @@ curl http://your-domain.com/health
 }
 ```
 
-### 로깅
+### Logging
 
 #### CloudWatch (AWS)
 
 ```bash
-# CloudWatch 로그 그룹 생성
+# Create CloudWatch log group
 aws logs create-log-group --log-group-name /ecs/nestjs-app
 
-# 로그 확인
+# View logs
 aws logs tail /ecs/nestjs-app --follow
 ```
 
-#### 로그 수집 도구
+#### Log Collection Tools
 
 - **ELK Stack**: Elasticsearch, Logstash, Kibana
-- **Grafana Loki**: 경량 로그 수집
-- **Datadog**: 통합 모니터링
+- **Grafana Loki**: Lightweight log collection
+- **Datadog**: Integrated monitoring
 
 ### APM (Application Performance Monitoring)
 
 #### New Relic
 
 ```bash
-# New Relic 에이전트 설치
+# Install New Relic agent
 pnpm add newrelic
 
-# newrelic.js 설정
+# Configure newrelic.js
 cp node_modules/newrelic/newrelic.js .
 ```
 
 `main.ts`:
 ```typescript
-import 'newrelic';  // 첫 줄에 추가
+import 'newrelic';  // Add at the top
 ```
 
 #### Datadog
@@ -507,57 +511,57 @@ import tracer from 'dd-trace';
 tracer.init();
 ```
 
-## 보안 체크리스트
+## Security Checklist
 
-### 배포 전 체크리스트
+### Pre-Deployment Checklist
 
-- [ ] 모든 환경 변수가 안전하게 관리되고 있는가?
-- [ ] 프로덕션 데이터베이스 비밀번호가 강력한가?
-- [ ] JWT 시크릿 키가 충분히 복잡한가?
-- [ ] CORS가 적절히 설정되어 있는가?
-- [ ] Rate Limiting이 활성화되어 있는가?
-- [ ] Helmet 보안 헤더가 설정되어 있는가?
-- [ ] 모든 입력 검증이 제대로 작동하는가?
-- [ ] SSL/TLS 인증서가 설치되어 있는가?
-- [ ] 로그에 민감한 정보가 포함되지 않는가?
-- [ ] 데이터베이스 백업이 설정되어 있는가?
+- [ ] Are all environment variables securely managed?
+- [ ] Is the production database password strong?
+- [ ] Is the JWT secret key sufficiently complex?
+- [ ] Is CORS properly configured?
+- [ ] Is Rate Limiting enabled?
+- [ ] Are Helmet security headers configured?
+- [ ] Is all input validation working properly?
+- [ ] Is SSL/TLS certificate installed?
+- [ ] Do logs not contain sensitive information?
+- [ ] Is database backup configured?
 
-### 정기 보안 점검
+### Regular Security Checks
 
 ```bash
-# 의존성 취약점 검사
+# Check dependency vulnerabilities
 pnpm audit
 
-# 심각한 취약점만 표시
+# Show only critical vulnerabilities
 pnpm audit --audit-level=moderate
 
-# 자동 수정
+# Auto fix
 pnpm audit fix
 ```
 
-## 롤백 전략
+## Rollback Strategy
 
-### Docker 이미지 롤백
+### Docker Image Rollback
 
 ```bash
-# 이전 버전으로 롤백
+# Rollback to previous version
 docker-compose down
 docker-compose up -d nestjs-app:1.0.0
 ```
 
-### ECS 롤백
+### ECS Rollback
 
 ```bash
-# 태스크 정의 이전 버전으로 업데이트
+# Update to previous task definition version
 aws ecs update-service \
   --cluster production-cluster \
   --service nestjs-app \
   --task-definition nestjs-app:PREVIOUS_VERSION
 ```
 
-## 성능 최적화
+## Performance Optimization
 
-### 1. Connection Pool 설정
+### 1. Connection Pool Configuration
 
 `database.config.ts`:
 ```typescript
@@ -567,47 +571,47 @@ extra: {
 },
 ```
 
-### 2. 캐싱 전략
+### 2. Caching Strategy
 
-Redis 캐시 레이어 추가:
+Add Redis cache layer:
 ```bash
 pnpm add @nestjs/cache-manager cache-manager cache-manager-redis-store
 ```
 
-### 3. 압축
+### 3. Compression
 
-Gzip 압축 활성화 (이미 `main.ts`에 설정됨):
+Enable Gzip compression (already configured in `main.ts`):
 ```typescript
 app.use(compression());
 ```
 
-## 문제 해결
+## Troubleshooting
 
-### 일반적인 배포 문제
+### Common Deployment Issues
 
-**1. 메모리 부족**
+**1. Out of memory**
 ```bash
-# Node.js 메모리 제한 증가
+# Increase Node.js memory limit
 NODE_OPTIONS="--max-old-space-size=2048" node dist/main.js
 ```
 
-**2. 포트 충돌**
+**2. Port conflict**
 ```bash
-# 사용 중인 포트 확인
+# Check port usage
 lsof -i :3000
 
-# 프로세스 종료
+# Kill process
 kill -9 [PID]
 ```
 
-**3. 데이터베이스 연결 실패**
-- 방화벽 규칙 확인
-- 보안 그룹 설정 확인
-- 데이터베이스 호스트 및 포트 확인
+**3. Database connection failure**
+- Check firewall rules
+- Verify security group settings
+- Check database host and port
 
-## 참고 자료
+## References
 
-- [NestJS 배포 가이드](https://docs.nestjs.com/deployment)
-- [Docker 공식 문서](https://docs.docker.com/)
-- [AWS ECS 문서](https://docs.aws.amazon.com/ecs/)
-- [PM2 문서](https://pm2.keymetrics.io/docs/)
+- [NestJS Deployment Guide](https://docs.nestjs.com/deployment)
+- [Docker Official Documentation](https://docs.docker.com/)
+- [AWS ECS Documentation](https://docs.aws.amazon.com/ecs/)
+- [PM2 Documentation](https://pm2.keymetrics.io/docs/)

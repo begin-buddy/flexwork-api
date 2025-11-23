@@ -1,30 +1,30 @@
-# 개발 가이드
+# Development Guide
 
 [English](./DEVELOPMENT.en.md) | [한국어](./DEVELOPMENT.md)
 
-NestJS Template 프로젝트의 개발 가이드입니다.
+Development guide for the NestJS Template project.
 
-## 목차
+## Table of Contents
 
-- [개발 환경 설정](#개발-환경-설정)
-- [프로젝트 구조](#프로젝트-구조)
-- [개발 워크플로우](#개발-워크플로우)
-- [코딩 가이드](#코딩-가이드)
-- [테스트 작성](#테스트-작성)
-- [디버깅](#디버깅)
-- [문제 해결](#문제-해결)
+- [Development Environment Setup](#development-environment-setup)
+- [Project Structure](#project-structure)
+- [Development Workflow](#development-workflow)
+- [Coding Guidelines](#coding-guidelines)
+- [Writing Tests](#writing-tests)
+- [Debugging](#debugging)
+- [Troubleshooting](#troubleshooting)
 
-## 개발 환경 설정
+## Development Environment Setup
 
-### 필수 도구
+### Required Tools
 
 1. **Node.js 20.x**
 ```bash
-# nvm 사용
+# Using nvm
 nvm install 20
 nvm use 20
 
-# 또는 직접 설치
+# Or install directly
 # https://nodejs.org/
 ```
 
@@ -35,24 +35,24 @@ npm install -g pnpm
 
 3. **Git**
 ```bash
-# 설치 확인
+# Check installation
 git --version
 ```
 
 4. **IDE**
-   - VS Code (권장)
+   - VS Code (recommended)
    - WebStorm
-   - 기타 TypeScript 지원 IDE
+   - Other TypeScript-supporting IDEs
 
-### VS Code 확장 프로그램
+### VS Code Extensions
 
-권장 확장 프로그램:
+Recommended extensions:
 - ESLint
 - Prettier
 - TypeScript and JavaScript Language Features
 - REST Client
 - GitLens
-- Thunder Client (API 테스트)
+- Thunder Client (API testing)
 
 `.vscode/extensions.json`:
 ```json
@@ -66,38 +66,38 @@ git --version
 }
 ```
 
-### 프로젝트 초기 설정
+### Initial Project Setup
 
 ```bash
-# 1. 저장소 클론
+# 1. Clone repository
 git clone https://github.com/your-org/template-typescript-nestjs.git
 cd template-typescript-nestjs
 
-# 2. 의존성 설치
+# 2. Install dependencies
 pnpm install
 
-# 3. 환경 변수 설정
+# 3. Set up environment variables
 cp .env.example .env
 
-# 4. 데이터베이스 설정 (Docker 사용)
+# 4. Database setup (using Docker)
 pnpm run docker:dev
 
-# 또는 로컬 MySQL 사용
-# MySQL 8.0 설치 및 데이터베이스 생성
+# Or use local MySQL
+# Install MySQL 8.0 and create database
 
-# 5. 개발 서버 실행
+# 5. Run development server
 pnpm run start:dev
 ```
 
-### 환경 변수 설정
+### Environment Variables Configuration
 
-`.env` 파일 예시:
+`.env` file example:
 ```env
-# 애플리케이션
+# Application
 NODE_ENV=development
 PORT=3000
 
-# 데이터베이스
+# Database
 DB_HOST=localhost
 DB_PORT=3306
 DB_USERNAME=nestjs
@@ -108,44 +108,44 @@ DB_DATABASE=nestjs_dev
 JWT_SECRET=your-secret-key
 JWT_EXPIRES_IN=1d
 
-# 로깅
+# Logging
 LOG_LEVEL=debug
 ```
 
-## 프로젝트 구조
+## Project Structure
 
 ```
 template-typescript-nestjs/
 ├── src/
-│   ├── common/              # 공통 모듈
-│   │   ├── config/          # 설정
+│   ├── common/              # Common modules
+│   │   ├── config/          # Configuration
 │   │   │   ├── app.config.ts
 │   │   │   └── database.config.ts
-│   │   ├── decorators/      # 커스텀 데코레이터
-│   │   ├── filters/         # 예외 필터
-│   │   ├── guards/          # 가드
-│   │   ├── interceptors/    # 인터셉터
-│   │   └── pipes/           # 파이프
-│   ├── modules/             # 기능 모듈
-│   │   ├── auth/            # 인증 모듈
+│   │   ├── decorators/      # Custom decorators
+│   │   ├── filters/         # Exception filters
+│   │   ├── guards/          # Guards
+│   │   ├── interceptors/    # Interceptors
+│   │   └── pipes/           # Pipes
+│   ├── modules/             # Feature modules
+│   │   ├── auth/            # Authentication module
 │   │   │   ├── dto/
 │   │   │   ├── auth.controller.ts
 │   │   │   ├── auth.service.ts
 │   │   │   └── auth.module.ts
-│   │   └── users/           # 사용자 모듈
+│   │   └── users/           # User module
 │   │       ├── dto/
 │   │       ├── entities/
 │   │       ├── users.controller.ts
 │   │       ├── users.service.ts
 │   │       └── users.module.ts
-│   ├── app.module.ts        # 루트 모듈
-│   └── main.ts              # 진입점
-├── test/                    # E2E 테스트
-├── i18n/                    # 국제화 파일
-└── docker/                  # Docker 설정
+│   ├── app.module.ts        # Root module
+│   └── main.ts              # Entry point
+├── test/                    # E2E tests
+├── i18n/                    # Internationalization files
+└── docker/                  # Docker configuration
 ```
 
-### 파일 명명 규칙
+### File Naming Conventions
 
 - **Module**: `users.module.ts`
 - **Controller**: `users.controller.ts`
@@ -154,63 +154,63 @@ template-typescript-nestjs/
 - **DTO**: `create-user.dto.ts`, `update-user.dto.ts`
 - **Test**: `users.service.spec.ts`, `users.e2e-spec.ts`
 
-## 개발 워크플로우
+## Development Workflow
 
-### 1. 새 기능 개발
+### 1. New Feature Development
 
 ```bash
-# Feature 브랜치 생성
+# Create feature branch
 git checkout -b feature/user-profile
 
-# 코드 작성
-# 1. DTO 작성
-# 2. Entity 작성
-# 3. Service 작성
-# 4. Controller 작성
-# 5. Module에 등록
+# Write code
+# 1. Write DTOs
+# 2. Write Entities
+# 3. Write Services
+# 4. Write Controllers
+# 5. Register in Module
 
-# 테스트 작성 및 실행
+# Write and run tests
 pnpm run test
 
-# 린트 검사
+# Lint check
 pnpm run lint
 
-# 커밋
+# Commit
 git add .
-git commit -m "feat(users): 사용자 프로필 조회 추가"
+git commit -m "feat(users): add user profile query"
 
-# 푸시 및 PR 생성
+# Push and create PR
 git push origin feature/user-profile
 ```
 
-### 2. 버그 수정
+### 2. Bug Fix
 
 ```bash
-# Bugfix 브랜치 생성
+# Create bugfix branch
 git checkout -b fix/login-error
 
-# 버그 수정
-# 1. 문제 재현 테스트 작성
-# 2. 버그 수정
-# 3. 테스트 통과 확인
+# Fix bug
+# 1. Write test to reproduce issue
+# 2. Fix bug
+# 3. Verify test passes
 
-# 커밋 및 푸시
-git commit -m "fix(auth): 로그인 에러 수정"
+# Commit and push
+git commit -m "fix(auth): fix login error"
 git push origin fix/login-error
 ```
 
-## 코딩 가이드
+## Coding Guidelines
 
-### Module 생성
+### Module Creation
 
 ```bash
-# NestJS CLI 사용
+# Using NestJS CLI
 nest g module posts
 nest g controller posts
 nest g service posts
 ```
 
-또는 수동 생성:
+Or manual creation:
 
 ```typescript
 // posts.module.ts
@@ -229,7 +229,7 @@ import { Post } from './entities/post.entity';
 export class PostsModule {}
 ```
 
-### DTO 작성
+### Writing DTOs
 
 ```typescript
 // create-post.dto.ts
@@ -239,8 +239,8 @@ import { i18nValidationMessage } from 'nestjs-i18n';
 
 export class CreatePostDto {
   @ApiProperty({
-    description: '게시글 제목',
-    example: '안녕하세요',
+    description: 'Post title',
+    example: 'Hello',
     minLength: 1,
     maxLength: 100,
   })
@@ -259,8 +259,8 @@ export class CreatePostDto {
   title: string;
 
   @ApiProperty({
-    description: '게시글 내용',
-    example: '게시글 내용입니다',
+    description: 'Post content',
+    example: 'This is the post content',
   })
   @IsString({
     message: i18nValidationMessage('validation.IS_STRING'),
@@ -272,7 +272,7 @@ export class CreatePostDto {
 }
 ```
 
-### Entity 작성
+### Writing Entities
 
 ```typescript
 // post.entity.ts
@@ -308,7 +308,7 @@ export class Post {
 }
 ```
 
-### Service 작성
+### Writing Services
 
 ```typescript
 // posts.service.ts
@@ -371,7 +371,7 @@ export class PostsService {
 }
 ```
 
-### Controller 작성
+### Writing Controllers
 
 ```typescript
 // posts.controller.ts
@@ -400,19 +400,19 @@ export class PostsController {
   @Post()
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: '게시글 생성' })
+  @ApiOperation({ summary: 'Create post' })
   create(@Body() createPostDto: CreatePostDto, @Request() req) {
     return this.postsService.create(createPostDto, req.user.id);
   }
 
   @Get()
-  @ApiOperation({ summary: '게시글 목록 조회' })
+  @ApiOperation({ summary: 'Get all posts' })
   findAll() {
     return this.postsService.findAll();
   }
 
   @Get(':id')
-  @ApiOperation({ summary: '게시글 상세 조회' })
+  @ApiOperation({ summary: 'Get post details' })
   findOne(@Param('id') id: string) {
     return this.postsService.findOne(+id);
   }
@@ -420,7 +420,7 @@ export class PostsController {
   @Patch(':id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: '게시글 수정' })
+  @ApiOperation({ summary: 'Update post' })
   update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
     return this.postsService.update(+id, updatePostDto);
   }
@@ -428,16 +428,16 @@ export class PostsController {
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: '게시글 삭제' })
+  @ApiOperation({ summary: 'Delete post' })
   remove(@Param('id') id: string) {
     return this.postsService.remove(+id);
   }
 }
 ```
 
-## 테스트 작성
+## Writing Tests
 
-### 단위 테스트
+### Unit Tests
 
 ```typescript
 // posts.service.spec.ts
@@ -488,10 +488,10 @@ describe('PostsService', () => {
   });
 
   describe('findAll', () => {
-    it('게시글 목록을 반환해야 한다', async () => {
+    it('should return an array of posts', async () => {
       const posts = [
-        { id: 1, title: '제목1', content: '내용1' },
-        { id: 2, title: '제목2', content: '내용2' },
+        { id: 1, title: 'Title 1', content: 'Content 1' },
+        { id: 2, title: 'Title 2', content: 'Content 2' },
       ];
 
       mockRepository.find.mockResolvedValue(posts);
@@ -507,8 +507,8 @@ describe('PostsService', () => {
   });
 
   describe('findOne', () => {
-    it('게시글을 찾으면 반환해야 한다', async () => {
-      const post = { id: 1, title: '제목', content: '내용' };
+    it('should return a post when found', async () => {
+      const post = { id: 1, title: 'Title', content: 'Content' };
       mockRepository.findOne.mockResolvedValue(post);
 
       const result = await service.findOne(1);
@@ -516,7 +516,7 @@ describe('PostsService', () => {
       expect(result).toEqual(post);
     });
 
-    it('게시글을 찾지 못하면 예외를 발생시켜야 한다', async () => {
+    it('should throw an exception when post not found', async () => {
       mockRepository.findOne.mockResolvedValue(null);
 
       await expect(service.findOne(999)).rejects.toThrow();
@@ -525,7 +525,7 @@ describe('PostsService', () => {
 });
 ```
 
-### E2E 테스트
+### E2E Tests
 
 ```typescript
 // posts.e2e-spec.ts
@@ -546,7 +546,7 @@ describe('PostsController (e2e)', () => {
     app = moduleFixture.createNestApplication();
     await app.init();
 
-    // 로그인하여 토큰 획득
+    // Login to get token
     const loginResponse = await request(app.getHttpServer())
       .post('/auth/login')
       .send({
@@ -562,24 +562,24 @@ describe('PostsController (e2e)', () => {
   });
 
   describe('/posts (POST)', () => {
-    it('게시글을 생성해야 한다', () => {
+    it('should create a post', () => {
       return request(app.getHttpServer())
         .post('/posts')
         .set('Authorization', `Bearer ${accessToken}`)
         .send({
-          title: '테스트 게시글',
-          content: '테스트 내용',
+          title: 'Test Post',
+          content: 'Test Content',
         })
         .expect(201)
         .expect((res) => {
           expect(res.body).toHaveProperty('id');
-          expect(res.body.title).toBe('테스트 게시글');
+          expect(res.body.title).toBe('Test Post');
         });
     });
   });
 
   describe('/posts (GET)', () => {
-    it('게시글 목록을 조회해야 한다', () => {
+    it('should get all posts', () => {
       return request(app.getHttpServer())
         .get('/posts')
         .expect(200)
@@ -591,9 +591,9 @@ describe('PostsController (e2e)', () => {
 });
 ```
 
-## 디버깅
+## Debugging
 
-### VS Code 디버깅 설정
+### VS Code Debug Configuration
 
 `.vscode/launch.json`:
 ```json
@@ -614,10 +614,10 @@ describe('PostsController (e2e)', () => {
 }
 ```
 
-### 로깅
+### Logging
 
 ```typescript
-// Winston 로거 사용
+// Using Winston logger
 import { Logger } from '@nestjs/common';
 
 @Injectable()
@@ -639,79 +639,79 @@ export class PostsService {
 }
 ```
 
-## 문제 해결
+## Troubleshooting
 
-### 일반적인 문제
+### Common Issues
 
-**1. 포트가 이미 사용 중**
+**1. Port already in use**
 ```bash
-# 포트 사용 프로세스 확인
+# Check process using port
 lsof -i :3000
 
-# 프로세스 종료
+# Kill process
 kill -9 [PID]
 ```
 
-**2. 데이터베이스 연결 실패**
+**2. Database connection failure**
 ```bash
-# .env 파일 확인
-# Docker 컨테이너 상태 확인
+# Check .env file
+# Check Docker container status
 docker ps
 
-# MySQL 로그 확인
+# Check MySQL logs
 docker logs nestjs-mysql-dev
 ```
 
-**3. 의존성 설치 오류**
+**3. Dependency installation error**
 ```bash
-# 캐시 삭제
+# Clear cache
 pnpm store prune
 
-# 재설치
+# Reinstall
 rm -rf node_modules pnpm-lock.yaml
 pnpm install
 ```
 
-**4. 테스트 실패**
+**4. Test failures**
 ```bash
-# 테스트 캐시 삭제
+# Clear test cache
 jest --clearCache
 
-# 단일 테스트 실행
+# Run single test
 pnpm run test -- posts.service.spec.ts
 ```
 
-## 유용한 명령어
+## Useful Commands
 
 ```bash
-# 개발 서버
-pnpm run start:dev      # 개발 모드 (watch)
-pnpm run start:debug    # 디버그 모드
+# Development server
+pnpm run start:dev      # Development mode (watch)
+pnpm run start:debug    # Debug mode
 
-# 빌드
-pnpm run build          # 프로덕션 빌드
+# Build
+pnpm run build          # Production build
 
-# 테스트
-pnpm run test           # 단위 테스트
-pnpm run test:watch     # Watch 모드
-pnpm run test:cov       # 커버리지
-pnpm run test:e2e       # E2E 테스트
+# Tests
+pnpm run test           # Unit tests
+pnpm run test:watch     # Watch mode
+pnpm run test:cov       # Coverage
+pnpm run test:e2e       # E2E tests
 
-# 코드 품질
+# Code quality
 pnpm run lint           # ESLint
 pnpm run format         # Prettier
-pnpm run format:check   # 포맷 검사
+pnpm run format:check   # Format check
 
 # Docker
-pnpm run docker:build   # 이미지 빌드
-pnpm run docker:up      # 컨테이너 실행
-pnpm run docker:down    # 컨테이너 중지
-pnpm run docker:dev     # 개발 환경 실행
+pnpm run docker:build   # Build image
+pnpm run docker:up      # Run container
+pnpm run docker:down    # Stop container
+pnpm run docker:dev     # Run development environment
 ```
 
-## 참고 자료
+## References
 
-- [NestJS 공식 문서](https://docs.nestjs.com/)
-- [TypeORM 문서](https://typeorm.io/)
-- [Jest 문서](https://jestjs.io/)
-- [Swagger 문서](https://swagger.io/docs/)
+- [NestJS Official Documentation](https://docs.nestjs.com/)
+- [TypeORM Documentation](https://typeorm.io/)
+- [Jest Documentation](https://jestjs.io/)
+- [Swagger Documentation](https://swagger.io/docs/)

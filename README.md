@@ -1,5 +1,7 @@
 # NestJS Template - Enterprise Grade
 
+[English](./README.en.md) | 한국어
+
 프로덕션 수준의 NestJS 프로젝트 템플릿입니다. 보안, 국제화, 테스트, CI/CD가 모두 설정되어 있습니다.
 
 [![CI](https://github.com/your-org/template-typescript-nestjs/workflows/CI/badge.svg)](https://github.com/your-org/template-typescript-nestjs/actions)
