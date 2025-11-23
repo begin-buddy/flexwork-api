@@ -1,0 +1,12 @@
+{
+  "isNotEmpty": "{property} is required",
+  "isString": "{property} must be a string",
+  "isNumber": "{property} must be a number",
+  "isEmail": "{property} must be a valid email address",
+  "minLength": "{property} must be at least {min} characters",
+  "maxLength": "{property} must be at most {max} characters",
+  "isBoolean": "{property} must be a boolean value",
+  "isDate": "{property} must be a valid date",
+  "isPositive": "{property} must be a positive number",
+  "isInt": "{property} must be an integer"
+}

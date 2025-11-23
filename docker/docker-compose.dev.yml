@@ -1,0 +1,83 @@
+services:
+  # NestJS 개발 환경
+  app-dev:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      target: dependencies
+    container_name: nestjs-app-dev
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+      - '9229:9229' # 디버깅 포트
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - DB_HOST=mysql-dev
+      - DB_PORT=3306
+      - DB_USERNAME=nestjs
+      - DB_PASSWORD=nestjs_password
+      - DB_DATABASE=nestjs_dev
+      - JWT_SECRET=dev-jwt-secret-key
+      - JWT_EXPIRES_IN=7d
+    volumes:
+      - ../src:/app/src
+      - ../test:/app/test
+      - ../i18n:/app/i18n
+      - ../package.json:/app/package.json
+      - ../tsconfig.json:/app/tsconfig.json
+      - ../tsconfig.build.json:/app/tsconfig.build.json
+      - ../nest-cli.json:/app/nest-cli.json
+    command: pnpm run start:dev
+    depends_on:
+      mysql-dev:
+        condition: service_healthy
+    networks:
+      - nestjs-dev-network
+
+  # MySQL 개발 데이터베이스
+  mysql-dev:
+    image: mysql:8.0
+    container_name: nestjs-mysql-dev
+    restart: unless-stopped
+    ports:
+      - '3307:3306' # 호스트의 다른 포트로 매핑
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_password
+      - MYSQL_DATABASE=nestjs_dev
+      - MYSQL_USER=nestjs
+      - MYSQL_PASSWORD=nestjs_password
+    volumes:
+      - mysql-dev-data:/var/lib/mysql
+      - ./mysql/init:/docker-entrypoint-initdb.d
+    networks:
+      - nestjs-dev-network
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'root', '-p$$MYSQL_ROOT_PASSWORD']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # Redis (캐싱용 - 선택사항)
+  redis-dev:
+    image: redis:7-alpine
+    container_name: nestjs-redis-dev
+    restart: unless-stopped
+    ports:
+      - '6379:6379'
+    networks:
+      - nestjs-dev-network
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+networks:
+  nestjs-dev-network:
+    driver: bridge
+
+volumes:
+  mysql-dev-data:
+    driver: local

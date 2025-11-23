@@ -1,0 +1,33 @@
+# 의존성
+node_modules
+pnpm-lock.yaml
+
+# 빌드 결과물
+dist
+build
+*.tsbuildinfo
+
+# 로그
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# 환경 변수
+.env
+.env.local
+.env.*.local
+
+# 에디터
+.vscode
+.idea
+*.swp
+*.swo
+
+# 시스템 파일
+.DS_Store
+Thumbs.db
+
+# 커버리지
+coverage
+.nyc_output

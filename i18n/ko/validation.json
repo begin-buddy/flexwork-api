@@ -1,0 +1,12 @@
+{
+  "isNotEmpty": "{property}은(는) 필수 항목입니다",
+  "isString": "{property}은(는) 문자열이어야 합니다",
+  "isNumber": "{property}은(는) 숫자여야 합니다",
+  "isEmail": "{property}은(는) 유효한 이메일 주소여야 합니다",
+  "minLength": "{property}은(는) 최소 {min}자 이상이어야 합니다",
+  "maxLength": "{property}은(는) 최대 {max}자 이하여야 합니다",
+  "isBoolean": "{property}은(는) boolean 값이어야 합니다",
+  "isDate": "{property}은(는) 유효한 날짜여야 합니다",
+  "isPositive": "{property}은(는) 양수여야 합니다",
+  "isInt": "{property}은(는) 정수여야 합니다"
+}

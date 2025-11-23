@@ -1,0 +1,14 @@
+{
+  "welcome": "Welcome!",
+  "hello": "Hello {name}!",
+  "success": "Success",
+  "error": "Error",
+  "notFound": "Not Found",
+  "serverError": "Server Error Occurred",
+  "unauthorized": "Unauthorized",
+  "forbidden": "Forbidden",
+  "badRequest": "Bad Request",
+  "created": "Created",
+  "updated": "Updated",
+  "deleted": "Deleted"
+}
