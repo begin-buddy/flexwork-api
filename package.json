@@ -30,6 +30,7 @@
     "docker:dev:down": "docker-compose -f docker/docker-compose.dev.yml down"
   },
   "dependencies": {
+    "@nestjs-jsonapi/core": "file:../nestjs-jsonapi/packages/core",
     "@nestjs-jsonapi/monorepo": "github:builder-shin/nestjs-jsonapi",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.2",
