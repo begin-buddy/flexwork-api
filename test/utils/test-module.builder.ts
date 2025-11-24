@@ -55,7 +55,9 @@ export async function createTestingModule(options: TestModuleOptions): Promise<T
     } else if (override.useClass !== undefined) {
       builder = builder.overrideProvider(override.provide).useClass(override.useClass);
     } else if (override.useFactory !== undefined) {
-      builder = builder.overrideProvider(override.provide).useFactory(override.useFactory);
+      builder = builder
+        .overrideProvider(override.provide)
+        .useFactory({ factory: override.useFactory });
     }
   }
 

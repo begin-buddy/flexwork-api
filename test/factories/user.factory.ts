@@ -50,7 +50,7 @@ export const userFactory = Factory.define<User, { isYoung?: boolean }>(
  * 관리자 사용자 팩토리 (userFactory 확장)
  */
 export const adminUserFactory = userFactory.params({
-  email: () => faker.internet.email({ provider: 'admin.example.com' }),
+  email: faker.internet.email({ provider: 'admin.example.com' }),
   isActive: true,
 });
 
