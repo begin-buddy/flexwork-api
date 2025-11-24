@@ -1,0 +1,52 @@
+services:
+  # PostgreSQL 개발 데이터베이스
+  postgres-dev:
+    image: postgres:16-alpine
+    container_name: flexwork-postgres-dev
+    restart: unless-stopped
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_DB=flexwork_dev
+      - POSTGRES_USER=flexwork
+      - POSTGRES_PASSWORD=flexwork_password
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres-dev-data:/var/lib/postgresql/data
+      - ./postgres/init:/docker-entrypoint-initdb.d
+    networks:
+      - flexwork-dev-network
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U flexwork -d flexwork_dev']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # pgAdmin (데이터베이스 관리 UI - 선택사항)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: flexwork-pgadmin
+    restart: unless-stopped
+    ports:
+      - '5050:80'
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@flexwork.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    networks:
+      - flexwork-dev-network
+    depends_on:
+      postgres-dev:
+        condition: service_healthy
+
+networks:
+  flexwork-dev-network:
+    driver: bridge
+
+volumes:
+  postgres-dev-data:
+    driver: local
+  pgadmin-data:
+    driver: local

@@ -34,3 +34,6 @@ coverage
 *.pid
 *.seed
 *.pid.lock
+
+# AI
+.order
