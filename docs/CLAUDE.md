@@ -12,7 +12,9 @@ docs/
 ├── DEVELOPMENT.md         # 개발 가이드
 ├── DEPLOYMENT.md          # 배포 가이드
 └── package/               # 패키지 문서
-    └── nestjs-crud/       # JSON:API 패키지 문서
+    ├── nestjs-crud/       # JSON:API 패키지 문서
+    │   └── HOWTOUSE.md    # 사용법 가이드
+    └── jest-swagger/      # jest-swagger 패키지 문서
         └── HOWTOUSE.md    # 사용법 가이드
 ```
 
@@ -582,13 +584,16 @@ src/modules/CLAUDE.md (모듈 작성 가이드)
     ↓ YES
 src/common/CLAUDE.md (공통 유틸리티)
     ↓
-JSON:API 상세 가이드
-    ↓
-docs/CLAUDE.md (이 문서)
-    ↓
-패키지 전체 문서
-    ↓
-docs/package/nestjs-crud/HOWTOUSE.md
+┌───────────────────────┬─────────────────────┐
+│ API 문서화 필요?     │ 테스트 작성 필요?  │
+│       ↓ YES          │       ↓ YES        │
+│ docs/CLAUDE.md       │ test/CLAUDE.md     │
+│ (JSON:API 가이드)    │ (jest-swagger)     │
+└───────────────────────┴─────────────────────┘
+    ↓                           ↓
+패키지 전체 문서          패키지 전체 문서
+    ↓                           ↓
+nestjs-crud/HOWTOUSE.md   jest-swagger/HOWTOUSE.md
 ```
 
 ## 실전 팁
@@ -644,12 +649,96 @@ docs/package/nestjs-crud/HOWTOUSE.md
 const message = await this.i18n.translate('common.created');
 ```
 
+## jest-swagger 패키지 문서
+
+### 주요 참조: test/CLAUDE.md
+
+`test/CLAUDE.md` 파일은 jest-swagger를 사용한 테스트 기반 API 문서화 가이드입니다.
+
+**문서 구성:**
+- jest-swagger 개요 및 설정
+- 데코레이터 기반 API 문서화
+- E2E 테스트 패턴
+- 스키마 자동 추론 및 변환
+- 문제 해결
+
+### 빠른 참조: 핵심 개념
+
+#### 1. 테스트에서 API 문서 생성
+
+```typescript
+import { api, path, response } from 'jest-swagger';
+
+describe('사용자 API', () => {
+  @api({
+    tags: ['users'],
+    summary: '사용자 조회',
+  })
+  @path('get', '/users/{id}')
+  @response(200, {
+    description: '성공',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            id: { type: 'number' },
+            name: { type: 'string' },
+          },
+        },
+      },
+    },
+  })
+  test('ID로 사용자를 조회할 수 있어야 함', async () => {
+    // 테스트 코드
+  });
+});
+```
+
+#### 2. Jest Reporter 설정
+
+```typescript
+// jest.config.ts
+reporters: [
+  'default',
+  [
+    'jest-swagger/dist/reporters',
+    {
+      outputDir: './docs',
+      filename: 'openapi',
+      format: 'yaml',
+      printPath: true,
+    },
+  ],
+],
+```
+
+#### 3. 실제 응답 캡처
+
+```typescript
+import { CaptureResponse } from 'jest-swagger';
+
+@CaptureResponse({
+  statusCode: 200,
+  autoInferSchema: true,  // 스키마 자동 추론
+})
+test('사용자 조회', async () => {
+  const response = await fetch('/api/users/1');
+  // 응답이 자동으로 캡처되어 문서에 포함됨
+});
+```
+
+**상세 가이드**: `test/CLAUDE.md` 참조
+**전체 문서**: `docs/package/jest-swagger/HOWTOUSE.md` 참조
+
 ## 추가 참조
 
 - **프로젝트 개요**: `/CLAUDE.md`
 - **모듈 작성 가이드**: `src/modules/CLAUDE.md`
 - **공통 유틸리티**: `src/common/CLAUDE.md`
-- **패키지 전체 문서**: `docs/package/nestjs-crud/HOWTOUSE.md`
+- **테스트 가이드**: `test/CLAUDE.md`
+- **JSON:API 패키지 문서**: `docs/package/nestjs-crud/HOWTOUSE.md`
+- **jest-swagger 패키지 문서**: `docs/package/jest-swagger/HOWTOUSE.md`
 - **아키텍처 문서**: `docs/ARCHITECTURE.md`
 - **배포 가이드**: `docs/DEPLOYMENT.md`
 
