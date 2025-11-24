@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@nestjs-jsonapi/monorepo':
         specifier: github:builder-shin/nestjs-jsonapi
-        version: https://codeload.github.com/builder-shin/nestjs-jsonapi/tar.gz/ddd03f85899ab02fde04921ec3f3962d2d522313
+        version: https://codeload.github.com/builder-shin/nestjs-jsonapi/tar.gz/2a96db4dfab8d96d9584347d96472fb130b372a9
       '@nestjs/common':
         specifier: ^11.0.1
         version: 11.1.9(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2)
@@ -812,8 +812,8 @@ packages:
   '@napi-rs/wasm-runtime@0.2.12':
     resolution: {integrity: sha512-ZVWUcfwY4E/yPitQJl481FjFo3K22D6qF0DuFH6Y/nbnE11GY5uguDxZMGXPQ8WQ0128MXQD7TnfHyK4oWoIJQ==}
 
-  '@nestjs-jsonapi/monorepo@https://codeload.github.com/builder-shin/nestjs-jsonapi/tar.gz/ddd03f85899ab02fde04921ec3f3962d2d522313':
-    resolution: {tarball: https://codeload.github.com/builder-shin/nestjs-jsonapi/tar.gz/ddd03f85899ab02fde04921ec3f3962d2d522313}
+  '@nestjs-jsonapi/monorepo@https://codeload.github.com/builder-shin/nestjs-jsonapi/tar.gz/2a96db4dfab8d96d9584347d96472fb130b372a9':
+    resolution: {tarball: https://codeload.github.com/builder-shin/nestjs-jsonapi/tar.gz/2a96db4dfab8d96d9584347d96472fb130b372a9}
     version: 1.0.0
     engines: {node: '>=18.0.0', pnpm: '>=8.0.0'}
 
@@ -4756,7 +4756,7 @@ snapshots:
       '@tybys/wasm-util': 0.10.1
     optional: true
 
-  '@nestjs-jsonapi/monorepo@https://codeload.github.com/builder-shin/nestjs-jsonapi/tar.gz/ddd03f85899ab02fde04921ec3f3962d2d522313': {}
+  '@nestjs-jsonapi/monorepo@https://codeload.github.com/builder-shin/nestjs-jsonapi/tar.gz/2a96db4dfab8d96d9584347d96472fb130b372a9': {}
 
   '@nestjs/cli@11.0.12(@types/node@22.19.1)':
     dependencies:
