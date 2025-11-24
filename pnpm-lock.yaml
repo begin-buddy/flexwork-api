@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@nestjs-jsonapi/monorepo':
         specifier: github:builder-shin/nestjs-jsonapi
-        version: https://codeload.github.com/builder-shin/nestjs-jsonapi/tar.gz/0bff1821a559e9d52eb27ad3fad9a634c03346aa(@nestjs/common@11.1.9(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.9)(@nestjs/websockets@11.1.9)(reflect-metadata@0.2.2)(rxjs@7.8.2)
+        version: https://codeload.github.com/builder-shin/nestjs-jsonapi/tar.gz/b4854c8c6331a197d559f046ee2f33a01012169d(@nestjs/common@11.1.9(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.9)(@nestjs/websockets@11.1.9)(reflect-metadata@0.2.2)(rxjs@7.8.2)
       '@nestjs/common':
         specifier: ^11.0.1
         version: 11.1.9(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2)
@@ -818,8 +818,8 @@ packages:
   '@napi-rs/wasm-runtime@0.2.12':
     resolution: {integrity: sha512-ZVWUcfwY4E/yPitQJl481FjFo3K22D6qF0DuFH6Y/nbnE11GY5uguDxZMGXPQ8WQ0128MXQD7TnfHyK4oWoIJQ==}
 
-  '@nestjs-jsonapi/monorepo@https://codeload.github.com/builder-shin/nestjs-jsonapi/tar.gz/0bff1821a559e9d52eb27ad3fad9a634c03346aa':
-    resolution: {tarball: https://codeload.github.com/builder-shin/nestjs-jsonapi/tar.gz/0bff1821a559e9d52eb27ad3fad9a634c03346aa}
+  '@nestjs-jsonapi/monorepo@https://codeload.github.com/builder-shin/nestjs-jsonapi/tar.gz/b4854c8c6331a197d559f046ee2f33a01012169d':
+    resolution: {tarball: https://codeload.github.com/builder-shin/nestjs-jsonapi/tar.gz/b4854c8c6331a197d559f046ee2f33a01012169d}
     version: 1.0.0
     engines: {node: '>=18.0.0', pnpm: '>=8.0.0'}
     peerDependencies:
@@ -828,6 +828,17 @@ packages:
       '@nestjs/websockets': ^10.3.0 || ^11.0.0
       reflect-metadata: ^0.1.13 || ^0.2.0
       rxjs: ^7.8.0
+    peerDependenciesMeta:
+      '@nestjs/common':
+        optional: true
+      '@nestjs/core':
+        optional: true
+      '@nestjs/websockets':
+        optional: true
+      reflect-metadata:
+        optional: true
+      rxjs:
+        optional: true
 
   '@nestjs/cli@11.0.12':
     resolution: {integrity: sha512-V3fD1xESlFcJ1xpwOtUhn0edLvIa76Sx8mkvdR1s8cM4c/rZO+yGmXP30ZQwPfIJPTgBvsw93F/i+87eV96wcQ==}
@@ -4869,15 +4880,16 @@ snapshots:
       '@tybys/wasm-util': 0.10.1
     optional: true
 
-  '@nestjs-jsonapi/monorepo@https://codeload.github.com/builder-shin/nestjs-jsonapi/tar.gz/0bff1821a559e9d52eb27ad3fad9a634c03346aa(@nestjs/common@11.1.9(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.9)(@nestjs/websockets@11.1.9)(reflect-metadata@0.2.2)(rxjs@7.8.2)':
+  '@nestjs-jsonapi/monorepo@https://codeload.github.com/builder-shin/nestjs-jsonapi/tar.gz/b4854c8c6331a197d559f046ee2f33a01012169d(@nestjs/common@11.1.9(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.9)(@nestjs/websockets@11.1.9)(reflect-metadata@0.2.2)(rxjs@7.8.2)':
     dependencies:
+      ioredis: 5.8.2
+      socket.io: 4.8.1
+    optionalDependencies:
       '@nestjs/common': 11.1.9(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2)
       '@nestjs/core': 11.1.9(@nestjs/common@11.1.9(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/platform-express@11.1.9)(@nestjs/websockets@11.1.9)(reflect-metadata@0.2.2)(rxjs@7.8.2)
       '@nestjs/websockets': 11.1.9(@nestjs/common@11.1.9(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.9)(reflect-metadata@0.2.2)(rxjs@7.8.2)
-      ioredis: 5.8.2
       reflect-metadata: 0.2.2
       rxjs: 7.8.2
-      socket.io: 4.8.1
     transitivePeerDependencies:
       - bufferutil
       - supports-color
