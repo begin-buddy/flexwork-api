@@ -25,6 +25,7 @@ docs/
 `docs/package/nestjs-crud/HOWTOUSE.md` 파일은 NestJS JSON:API 패키지의 완전한 사용 가이드입니다.
 
 **문서 구성:**
+
 - 개요 및 주요 기능
 - 설치 방법 (ORM 어댑터별)
 - 빠른 시작 가이드
@@ -34,27 +35,45 @@ docs/
 
 ### 빠른 참조: 핵심 개념
 
-#### 1. JSON:API 리소스 정의
+#### 1. TypeORM 엔티티 정의
 
 ```typescript
-@JsonApiResource({
-  type: 'users',      // JSON:API 타입 (복수형 권장)
-  entity: User,       // TypeORM 엔티티
-})
-export class UserResource {
-  @JsonApiAttribute()
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+
+@Entity('users')
+export class User {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
   name: string;
 
-  @JsonApiAttribute()
+  @Column()
   email: string;
+
+  @Column({ default: true })
+  isActive: boolean;
 }
 ```
 
-#### 2. 자동 CRUD 엔드포인트
+#### 2. 리소스 및 컨트롤러 설정
 
 ```typescript
+import { Controller } from '@nestjs/common';
+import { JsonApiResource, JsonApiController } from '@nestjs-jsonapi/core';
+
+// 리소스 메타데이터 설정
+@JsonApiResource({
+  type: 'users', // JSON:API 타입 (복수형 권장)
+  routes: ['index', 'show', 'create', 'update', 'destroy'],
+  allowedFilters: ['email', 'isActive'],
+  allowedSorts: ['name', 'createdAt'],
+  paginationStrategy: 'page-based',
+  defaultPageSize: 20,
+  maxPageSize: 100,
+})
 @Controller('users')
-@JsonApiController(UserResource)
+@JsonApiController()
 export class UsersController {
   // 자동으로 생성되는 엔드포인트:
   // GET    /users         - 목록 조회
@@ -65,34 +84,48 @@ export class UsersController {
 }
 ```
 
-#### 3. 관계 정의
+#### 3. 관계 정의 (TypeORM 엔티티 사용)
 
 ```typescript
-@JsonApiResource({
-  type: 'articles',
-  entity: Article,
-})
-export class ArticleResource {
-  @JsonApiAttribute()
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+
+@Entity('articles')
+export class Article {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
   title: string;
 
-  @JsonApiRelationship({
-    type: 'users',                    // 관계 타입
-    resource: () => UserResource,     // 관계 리소스
-  })
-  author: UserResource;
+  @Column()
+  authorId: number;
+
+  @ManyToOne(() => User, { eager: true })
+  @JoinColumn({ name: 'authorId' })
+  author: User;
 }
+
+// 컨트롤러에서 관계 포함 설정
+@JsonApiResource({
+  type: 'articles',
+  allowedIncludes: ['author'], // include 파라미터로 관계 데이터 포함 가능
+})
+@Controller('articles')
+@JsonApiController()
+export class ArticlesController {}
 ```
 
 #### 4. 쿼리 파라미터
 
 **필터링:**
+
 ```bash
 GET /users?filter[email]=hong@example.com
 GET /users?filter[isActive]=true
 ```
 
 **정렬:**
+
 ```bash
 GET /users?sort=name           # 오름차순
 GET /users?sort=-createdAt     # 내림차순 (-)
@@ -100,12 +133,14 @@ GET /users?sort=name,-email    # 다중 정렬
 ```
 
 **페이징:**
+
 ```bash
 GET /users?page[offset]=0&page[limit]=10
 GET /users?page[number]=1&page[size]=20
 ```
 
 **관계 포함:**
+
 ```bash
 GET /articles?include=author
 GET /articles?include=author,comments
@@ -113,6 +148,7 @@ GET /articles?include=author,comments.author  # 중첩 관계
 ```
 
 **필드 선택:**
+
 ```bash
 GET /users?fields[users]=name,email
 ```
@@ -120,6 +156,7 @@ GET /users?fields[users]=name,email
 #### 5. JSON:API 응답 형식
 
 **단일 리소스:**
+
 ```json
 {
   "jsonapi": {
@@ -137,6 +174,7 @@ GET /users?fields[users]=name,email
 ```
 
 **관계 포함:**
+
 ```json
 {
   "jsonapi": {
@@ -177,7 +215,7 @@ GET /users?fields[users]=name,email
 ```typescript
 import { ApiTags } from '@nestjs/swagger';
 
-@ApiTags('users')  // Swagger 그룹 지정
+@ApiTags('users') // Swagger 그룹 지정
 @Controller('users')
 export class UserController {}
 ```
@@ -294,6 +332,7 @@ async create(@Body() dto: CreateUserDto) {}
 ### 1. 기본 CRUD 예제
 
 #### 엔티티 정의
+
 ```typescript
 @Entity('examples')
 export class Example extends BaseEntity {
@@ -308,25 +347,27 @@ export class Example extends BaseEntity {
 }
 ```
 
-#### 리소스 정의 (JSON:API)
+#### 컨트롤러 정의 (JSON:API)
+
 ```typescript
+import { Controller } from '@nestjs/common';
+import { JsonApiResource, JsonApiController } from '@nestjs-jsonapi/core';
+
 @JsonApiResource({
   type: 'examples',
-  entity: Example,
+  routes: ['index', 'show', 'create', 'update', 'destroy'],
+  allowedFilters: ['title', 'isActive'],
+  allowedSorts: ['title', 'createdAt'],
 })
-export class ExampleResource {
-  @JsonApiAttribute()
-  title: string;
-
-  @JsonApiAttribute()
-  description: string;
-
-  @JsonApiAttribute()
-  isActive: boolean;
+@Controller('examples')
+@JsonApiController()
+export class ExamplesController {
+  // JSON:API CRUD 엔드포인트가 자동으로 생성됩니다
 }
 ```
 
 #### DTO 정의
+
 ```typescript
 export class CreateExampleDto {
   @ApiProperty({ description: '제목' })
@@ -353,6 +394,7 @@ export class ExampleResponseDto extends BaseDto {
 ```
 
 #### 서비스 구현
+
 ```typescript
 @Injectable()
 export class ExampleService {
@@ -396,6 +438,7 @@ export class ExampleService {
 ```
 
 #### 컨트롤러 구현
+
 ```typescript
 @ApiTags('examples')
 @Controller('examples')
@@ -449,10 +492,7 @@ export class ExampleController {
   @ApiOperation({ summary: '예제 수정' })
   @ApiParam({ name: 'id', type: Number })
   @ApiSuccessResponse(ExampleResponseDto)
-  async update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updateDto: UpdateExampleDto,
-  ) {
+  async update(@Param('id', ParseIntPipe) id: number, @Body() updateDto: UpdateExampleDto) {
     const result = await this.exampleService.update(id, updateDto);
     const message = await this.i18n.translate('common.updated');
 
@@ -503,38 +543,38 @@ export class Article extends BaseEntity {
 }
 ```
 
-#### JSON:API 관계 리소스
+#### JSON:API 컨트롤러 설정
 
 ```typescript
+// users.controller.ts
 @JsonApiResource({
   type: 'users',
-  entity: User,
+  routes: ['index', 'show'],
+  allowedIncludes: ['articles'], // 관계 데이터 포함 허용
 })
-export class UserResource {
-  @JsonApiAttribute()
-  name: string;
+@Controller('users')
+@JsonApiController()
+export class UsersController {}
 
-  @JsonApiRelationship({
-    type: 'articles',
-    resource: () => ArticleResource,
-  })
-  articles: ArticleResource[];
-}
-
+// articles.controller.ts
 @JsonApiResource({
   type: 'articles',
-  entity: Article,
+  routes: ['index', 'show', 'create', 'update', 'destroy'],
+  allowedIncludes: ['author'], // 관계 데이터 포함 허용
 })
-export class ArticleResource {
-  @JsonApiAttribute()
-  title: string;
+@Controller('articles')
+@JsonApiController()
+export class ArticlesController {}
+```
 
-  @JsonApiRelationship({
-    type: 'users',
-    resource: () => UserResource,
-  })
-  author: UserResource;
-}
+**사용 예제:**
+
+```bash
+# 사용자와 관련 게시글 함께 조회
+GET /users/1?include=articles
+
+# 게시글과 작성자 정보 함께 조회
+GET /articles?include=author
 ```
 
 ### 3. 고급 쿼리 예제
@@ -601,6 +641,7 @@ nestjs-crud/HOWTOUSE.md   jest-swagger/HOWTOUSE.md
 ### 1. Swagger 문서 확인
 
 서버 실행 후 http://localhost:3000/api-docs 에서 실시간 API 문서 확인:
+
 - 모든 엔드포인트 목록
 - 요청/응답 스키마
 - 직접 테스트 가능 (Try it out)
@@ -656,6 +697,7 @@ const message = await this.i18n.translate('common.created');
 `test/CLAUDE.md` 파일은 jest-swagger를 사용한 테스트 기반 API 문서화 가이드입니다.
 
 **문서 구성:**
+
 - jest-swagger 개요 및 설정
 - 데코레이터 기반 API 문서화
 - E2E 테스트 패턴
@@ -760,9 +802,9 @@ test('사용자 조회', async () => {
 ### 관계 데이터가 포함되지 않을 때
 
 1. 엔티티에 관계 정의 확인 (`@ManyToOne`, `@OneToMany` 등)
-2. 리소스에 `@JsonApiRelationship()` 정의 확인
-3. 쿼리에 `include` 파라미터 포함 확인
-4. 서비스에서 `relations` 옵션 확인
+2. `@JsonApiResource()` 데코레이터의 `allowedIncludes` 설정 확인
+3. 쿼리에 `include` 파라미터 포함 확인 (예: `?include=author`)
+4. TypeORM 관계 설정에서 `eager: true` 또는 서비스에서 `relations` 옵션 확인
 
 ## 버전 관리
 

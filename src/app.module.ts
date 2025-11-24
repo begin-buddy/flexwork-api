@@ -10,7 +10,6 @@ import { validationSchema } from './config/validation.schema';
 import { LoggerModule } from './shared/logger/logger.module';
 import { HealthModule } from './shared/health/health.module';
 import { I18nConfigModule } from './shared/i18n/i18n.module';
-import { ExampleModule } from './modules/example/example.module';
 
 @Module({
   imports: [
@@ -51,7 +50,6 @@ import { ExampleModule } from './modules/example/example.module';
     LoggerModule,
     HealthModule,
     I18nConfigModule,
-    ExampleModule,
   ],
   controllers: [AppController],
   providers: [

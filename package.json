@@ -33,6 +33,7 @@
     "docker:postgres:logs": "docker-compose -f docker/docker-compose.postgres.yml logs -f"
   },
   "dependencies": {
+    "@nestjs-jsonapi/core": "file:../nestjs-jsonapi/packages/core",
     "@nestjs-jsonapi/monorepo": "github:builder-shin/nestjs-jsonapi",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.2",
