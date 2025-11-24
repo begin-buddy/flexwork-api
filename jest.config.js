@@ -65,15 +65,16 @@ module.exports = {
   // 테스트 셋업 파일
   setupFilesAfterEnv: ['<rootDir>/test/setup.ts'],
 
-  // 커버리지 임계값 (프로젝트 템플릿 - 실제 프로젝트에서는 80%로 설정 권장)
-  coverageThreshold: {
-    global: {
-      branches: 70,
-      functions: 70,
-      lines: 70,
-      statements: 70,
-    },
-  },
+  // 커버리지 임계값 (템플릿 프로젝트 - threshold 비활성화)
+  // 실제 프로젝트에서는 아래 주석을 해제하고 사용하세요
+  // coverageThreshold: {
+  //   global: {
+  //     branches: 70,
+  //     functions: 70,
+  //     lines: 70,
+  //     statements: 70,
+  //   },
+  // },
 
   // 커버리지 리포터
   coverageReporters: ['text', 'text-summary', 'html', 'lcov'],

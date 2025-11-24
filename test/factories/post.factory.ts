@@ -62,7 +62,7 @@ export const postFactory = Factory.define<Post>(({ sequence, associations }) => 
  */
 export const publishedPostFactory = postFactory.params({
   isPublished: true,
-  publishedAt: () => faker.date.past(),
+  publishedAt: faker.date.past(),
 });
 
 /**

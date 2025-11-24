@@ -7,6 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
+    "typecheck": "tsc --noEmit",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "format:check": "prettier --check \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
@@ -29,6 +30,7 @@
     "docker:dev:down": "docker-compose -f docker/docker-compose.dev.yml down"
   },
   "dependencies": {
+    "@nestjs-jsonapi/monorepo": "github:builder-shin/nestjs-jsonapi",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
@@ -38,9 +40,11 @@
     "@nestjs/terminus": "^11.0.0",
     "@nestjs/throttler": "^6.4.0",
     "@nestjs/typeorm": "^11.0.0",
+    "@nestjs/websockets": "^11.1.9",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
     "helmet": "^8.1.0",
+    "jest-swagger": "github:builder-shin/jest-swagger",
     "joi": "^18.0.2",
     "mysql2": "^3.15.3",
     "nest-winston": "^1.10.2",
