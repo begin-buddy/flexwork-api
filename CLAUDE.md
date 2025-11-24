@@ -9,27 +9,32 @@
 ## 핵심 기술 스택
 
 ### 프레임워크 & ORM
+
 - **NestJS** ^11.0.1 - 프로그레시브 Node.js 프레임워크
 - **TypeORM** ^0.3.27 - 강력한 ORM 지원
 - **MySQL** 2 - 프로덕션급 RDBMS
 - **@nestjs-jsonapi/monorepo** - JSON:API 1.1 스펙 구현
 
 ### 보안 & 검증
+
 - **Helmet** ^8.1.0 - HTTP 헤더 보안 강화
 - **@nestjs/throttler** ^6.4.0 - Rate Limiting
 - **class-validator** ^0.14.2 - 입력 검증
 - **class-transformer** ^0.5.1 - 데이터 변환
 
 ### 문서화 & API
+
 - **@nestjs/swagger** ^11.2.3 - OpenAPI/Swagger 자동 문서화
 - **nestjs-i18n** ^10.5.1 - 다국어 지원
 
 ### 로깅 & 모니터링
+
 - **nest-winston** ^1.10.2 - 구조화된 로그 관리
 - **winston** ^3.18.3 - 로깅 라이브러리
 - **@nestjs/terminus** ^11.0.0 - 헬스체크
 
 ### 테스팅
+
 - **Jest** ^30.0.0 - 테스팅 프레임워크
 - **@faker-js/faker** ^10.1.0 - 테스트 데이터 생성
 - **fishery** ^2.3.1 - 팩토리 패턴 테스트 데이터
@@ -71,6 +76,7 @@ template-typescript-nestjs/
 이 프로젝트는 `@nestjs-jsonapi/monorepo` 패키지를 사용하여 JSON:API 1.1 스펙을 구현합니다.
 
 ### 주요 기능
+
 - ✅ 완전한 JSON:API 1.1 준수
 - ✅ TypeScript 완벽 지원 (Strict 모드)
 - ✅ TypeORM 어댑터 지원
@@ -79,14 +85,16 @@ template-typescript-nestjs/
 - ✅ OpenAPI/Swagger 통합
 
 ### 핵심 컴포넌트
-- **@JsonApiResource** - 리소스 정의 데코레이터
-- **@JsonApiAttribute** - 속성 정의 데코레이터
-- **@JsonApiRelationship** - 관계 정의 데코레이터
-- **@JsonApiController** - 자동 CRUD 엔드포인트 생성
+
+- **@JsonApiResource()** - 리소스 정의 데코레이터 (타입 및 라우트 설정)
+- **@JsonApiController()** - 컨트롤러 데코레이터 (경로 설정)
+- **일반 TypeORM 엔티티** - 별도의 속성 데코레이터 없이 TypeORM 엔티티 직접 사용
+- **JSON:API 자동 변환** - 엔티티 데이터를 JSON:API 형식으로 자동 변환
 
 ## 개발 시작 가이드
 
 ### 필수 요구사항
+
 - Node.js >= 20.x
 - pnpm >= 8.x
 - MySQL (또는 Docker)
@@ -129,6 +137,7 @@ pnpm run start:debug
 ### 4. API 문서 확인
 
 서버 실행 후 다음 URL에 접근:
+
 - **API 문서**: http://localhost:3000/api-docs
 - **헬스체크**: http://localhost:3000/health
 
@@ -157,6 +166,7 @@ pnpm run test:cov
 6. **앱 모듈에 추가** - `src/app.module.ts`
 
 자세한 내용은 다음 문서를 참조하세요:
+
 - 모듈 작성: `src/modules/CLAUDE.md`
 - 공통 유틸리티: `src/common/CLAUDE.md`
 - 패키지 사용법: `docs/CLAUDE.md`
@@ -164,6 +174,7 @@ pnpm run test:cov
 ## 주요 명령어
 
 ### 개발
+
 ```bash
 pnpm run start:dev         # 개발 서버 실행 (핫 리로드)
 pnpm run start:debug       # 디버그 모드 실행
@@ -172,6 +183,7 @@ pnpm run start:prod        # 프로덕션 실행
 ```
 
 ### 코드 품질
+
 ```bash
 pnpm run lint              # ESLint 실행 (자동 수정)
 pnpm run lint:check        # ESLint 검사만
@@ -181,6 +193,7 @@ pnpm run typecheck         # TypeScript 타입 검사
 ```
 
 ### 테스트
+
 ```bash
 pnpm run test              # 단위 테스트
 pnpm run test:watch        # 테스트 watch 모드
@@ -189,6 +202,7 @@ pnpm run test:cov          # 커버리지 리포트
 ```
 
 ### Docker
+
 ```bash
 pnpm run docker:build      # Docker 이미지 빌드
 pnpm run docker:up         # 프로덕션 환경 실행
@@ -231,16 +245,19 @@ CORS_ORIGIN=http://localhost:3000
 ## 아키텍처 특징
 
 ### 계층형 아키텍처
+
 - **Controller Layer**: HTTP 요청 처리 및 응답
 - **Service Layer**: 비즈니스 로직
 - **Repository Layer**: 데이터 접근 (TypeORM)
 
 ### 도메인 주도 설계 (DDD)
+
 - 기능별 모듈 분리
 - 도메인 중심 설계
 - 명확한 책임 분리
 
 ### 의존성 주입 (DI)
+
 - NestJS DI 컨테이너 활용
 - 느슨한 결합
 - 테스트 용이성
@@ -256,6 +273,7 @@ CORS_ORIGIN=http://localhost:3000
 ## 다국어 지원
 
 nestjs-i18n을 사용한 다국어 지원:
+
 - 지원 언어: 한국어(ko), 영어(en)
 - `Accept-Language` 헤더 자동 감지
 - 번역 파일: `i18n/{lang}/`
@@ -264,6 +282,7 @@ nestjs-i18n을 사용한 다국어 지원:
 ## 로깅
 
 Winston을 사용한 구조화된 로깅:
+
 - 로그 레벨: error, warn, info, debug
 - 파일 로그: `logs/` 디렉토리
 - 자동 로그 로테이션
@@ -283,6 +302,7 @@ Winston을 사용한 구조화된 로깅:
 ### 일반적인 문제
 
 1. **모듈을 찾을 수 없음**
+
    ```bash
    pnpm install
    pnpm store prune && pnpm install
