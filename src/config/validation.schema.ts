@@ -31,4 +31,14 @@ export const validationSchema = Joi.object({
   DATABASE_NAME: Joi.string().default('nestjs_db'),
   DATABASE_USER: Joi.string().default('postgres'),
   DATABASE_PASSWORD: Joi.string().default('postgres'),
+
+  // FDW (Foreign Data Wrapper) 설정 - AUTR 원격 데이터베이스
+  AUTR_DATABASE_HOST: Joi.string().default('localhost'),
+  AUTR_DATABASE_PORT: Joi.number().default(5432),
+  AUTR_DATABASE_NAME: Joi.string().default('autr_db'),
+  AUTR_DATABASE_USER: Joi.string().default('postgres'),
+  AUTR_DATABASE_PASSWORD: Joi.string().allow('').default(''),
+  AUTR_FDW_ENABLED: Joi.boolean().default(true),
+  AUTR_FDW_SERVER_NAME: Joi.string().default('autr_server'),
+  AUTR_FDW_LOCAL_SCHEMA: Joi.string().default('autr'),
 });

@@ -10,6 +10,7 @@ import { validationSchema } from './config/validation.schema';
 import { LoggerModule } from './shared/logger/logger.module';
 import { HealthModule } from './shared/health/health.module';
 import { I18nConfigModule } from './shared/i18n/i18n.module';
+import { FdwModule } from './shared/fdw/fdw.module';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { I18nConfigModule } from './shared/i18n/i18n.module';
     LoggerModule,
     HealthModule,
     I18nConfigModule,
+    FdwModule,
   ],
   controllers: [AppController],
   providers: [
